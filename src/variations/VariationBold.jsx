@@ -108,12 +108,18 @@ const boldStyles = {
     color: "var(--accent)",
   },
   introCtaRow: {
-    gridColumn: "1 / -1",
+    gridColumn: "2 / -1",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "baseline",
     gap: 24,
-    margin: "0 0 clamp(40px, 6vw, 80px)",
+    margin: "0 0 clamp(28px, 4.2vw, 56px)",
+  },
+  // Tighter than the standard sectionSpacer — used only right after the CTA
+  // row, where the gap before Timeline read as too large.
+  sectionSpacerTight: {
+    gridColumn: "1 / -1",
+    height: "clamp(56px, 8.4vw, 112px)",
   },
   aside: {
     fontFamily: "var(--font-body)",
@@ -156,7 +162,7 @@ const boldStyles = {
     gridColumn: "2 / -1",
     fontFamily: "var(--font-display)",
     fontWeight: 400,
-    fontSize: "clamp(44px, 7vw, 112px)",
+    fontSize: "clamp(40px, 6vw, 72px)",
     lineHeight: 1,
     letterSpacing: "-0.02em",
     margin: "0 0 clamp(32px, 5vw, 64px)",
@@ -324,17 +330,19 @@ function renderBoldBody(parts) {
 }
 
 function AboutWild({ content, leadHead, leadMid1, leadMid2, leadTail }) {
-  // Broken-grid editorial layout: Swiss/post-Swiss with deliberate breaks.
-  // Two visible structural rules (v-rule + h-rule) divide the frame into
-  // four regions. The 00.2 label is rotated and crosses the synopsis band's
-  // top rule — that overlap is the "break."
+  // Editorial layout: mono section labels + headline + a solid divider
+  // crossed by a rotated "ABOUT" label + a synopsis paragraph.
+  //
+  // Previously this was a fixed 4:3 "art frame" with dotted rules and
+  // percentage-positioned regions. Removed per feedback: the dotted rules
+  // didn't add much, and pinning regions to percentages of a fixed-aspect
+  // box left a large empty gap below the synopsis text that had nothing to
+  // do with how much content was actually there. This version sizes itself
+  // to its content instead.
   const ink = "var(--fg)";
-  const paper = "transparent";
   const accent = "var(--accent)";
 
-  // Responsive: below ~720px the broken grid gets cramped — switch to a
-  // stacked variant that preserves the same vocabulary (rules, mono labels,
-  // bracketed band) but in a vertical reading order.
+  // Responsive: below ~720px, drop to a single text column.
   const [narrow, setNarrow] = React.useState(false);
   React.useEffect(() => {
     const mq = window.matchMedia("(max-width: 720px)");
@@ -354,38 +362,33 @@ function AboutWild({ content, leadHead, leadMid1, leadMid2, leadTail }) {
     whiteSpace: "nowrap",
   };
 
-  if (narrow) {
-    return (
-      <section
-        style={{
-          gridColumn: "1 / -1",
-          margin: "clamp(30px, 5vw, 60px) auto clamp(40px, 6vw, 80px)",
-          width: "100%",
-          maxWidth: 1200,
-          background: paper,
-          color: ink,
-          position: "relative",
-          padding: 24,
-        }}
-      >
-        {/* Registration ticks */}
-        <span style={{ position: "absolute", top: 8, left: 8, width: 12, height: 12, borderLeft: `1.5px solid var(--accent)`, borderTop: `1.5px solid var(--accent)` }} />
-        <span style={{ position: "absolute", top: 8, right: 8, width: 12, height: 12, borderRight: `1.5px solid var(--accent)`, borderTop: `1.5px solid var(--accent)` }} />
-        <span style={{ position: "absolute", bottom: 8, left: 8, width: 12, height: 12, borderLeft: `1.5px solid var(--accent)`, borderBottom: `1.5px solid var(--accent)` }} />
-        <span style={{ position: "absolute", bottom: 8, right: 8, width: 12, height: 12, borderRight: `1.5px solid var(--accent)`, borderBottom: `1.5px solid var(--accent)` }} />
+  return (
+    <section
+      style={{
+        gridColumn: "1 / -1",
+        margin: "clamp(30px, 5vw, 60px) auto clamp(16px, 2.4vw, 32px)",
+        width: "100%",
+        maxWidth: 1200,
+        color: ink,
+        position: "relative",
+        padding: narrow ? "24px" : "32px 32px 0",
+      }}
+    >
+      {/* Registration ticks — L-shapes in each outer corner */}
+      <span style={{ position: "absolute", top: 8, left: 8, width: 12, height: 12, borderLeft: `1.5px solid var(--accent)`, borderTop: `1.5px solid var(--accent)` }} />
+      <span style={{ position: "absolute", top: 8, right: 8, width: 12, height: 12, borderRight: `1.5px solid var(--accent)`, borderTop: `1.5px solid var(--accent)` }} />
+      <span style={{ position: "absolute", bottom: 8, left: 8, width: 12, height: 12, borderLeft: `1.5px solid var(--accent)`, borderBottom: `1.5px solid var(--accent)` }} />
+      <span style={{ position: "absolute", bottom: 8, right: 8, width: 12, height: 12, borderRight: `1.5px solid var(--accent)`, borderBottom: `1.5px solid var(--accent)` }} />
 
-        {/* Region A label */}
-        <div style={{ marginBottom: 16 }}>
-          <span style={monoLabel}>00.1</span>
-        </div>
-
-        {/* Blurb headline */}
+      {/* Label + headline */}
+      <div style={{ marginBottom: narrow ? 24 : 32 }}>
+        <div style={{ ...monoLabel, marginBottom: narrow ? 14 : 16 }}>00.1</div>
         <h1
           style={{
-            margin: "0 0 28px",
+            margin: 0,
             fontFamily: "var(--font-display)",
             fontWeight: 600,
-            fontSize: "clamp(27px, 6.8vw, 41px)",
+            fontSize: narrow ? "clamp(13px, calc(5.5vw - 4.5px), 36px)" : "clamp(34px, 4.25vw, 61px)",
             lineHeight: 1.05,
             letterSpacing: "-0.015em",
             color: ink,
@@ -398,193 +401,35 @@ function AboutWild({ content, leadHead, leadMid1, leadMid2, leadTail }) {
           {leadMid2}
           <span style={{ fontStyle: "italic", color: accent }}>{leadTail}</span>
         </h1>
+      </div>
 
-        {/* Synopsis band — single column on narrow */}
-        <div
-          style={{
-            paddingTop: 12,
-            paddingBottom: 12,
-            borderTop: `1.5px dotted var(--accent-soft)`,
-          }}
-        >
+      {/* Solid divider — the rotated ABOUT label crosses it on wider screens */}
+      <div style={{ position: "relative", borderTop: `1.5px solid ${ink}` }}>
+        {!narrow && (
           <div
             style={{
-              ...monoLabel,
-              marginBottom: 14,
+              position: "absolute",
+              top: -36,
+              right: 0,
+              transform: "rotate(-90deg)",
+              transformOrigin: "100% 0",
+              whiteSpace: "nowrap",
             }}
           >
-            00.2
+            <span style={{ ...monoLabel, color: "var(--fg-muted)" }}>00.0 – 00.2 ABOUT</span>
           </div>
+        )}
+
+        <div style={{ paddingTop: 12, paddingBottom: narrow ? 24 : 32, paddingRight: narrow ? 0 : 64 }}>
+          <div style={{ ...monoLabel, marginBottom: 14 }}>00.2</div>
           <div
             style={{
               fontFamily: "var(--font-body)",
-              fontSize: 14.5,
+              fontSize: narrow ? 14.5 : 13.5,
               lineHeight: 1.55,
               color: ink,
-            }}
-          >
-            {content.intro.body.map((p, i) =>
-              typeof p === "string" ? (
-                <React.Fragment key={i}>{p}</React.Fragment>
-              ) : (
-                <a
-                  key={i}
-                  href={p.url}
-                  data-brand={p.brand || undefined}
-                  style={{
-                    color: accent,
-                    textDecoration: "underline",
-                    textDecorationThickness: "1px",
-                    textUnderlineOffset: "2px",
-                  }}
-                >
-                  {p.label}
-                </a>
-              )
-            )}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  return (
-    <section
-      style={{
-        gridColumn: "1 / -1",
-        margin: "clamp(30px, 5vw, 60px) auto clamp(40px, 6vw, 80px)",
-        width: "100%",
-        maxWidth: 1200,
-        background: paper,
-        color: ink,
-        position: "relative",
-        // 4:3 frame via aspect-ratio; min-height so it never collapses on narrow screens.
-        aspectRatio: "4 / 3",
-        minHeight: 540,
-      }}
-    >
-      {/* Registration ticks — L-shapes in each outer corner */}
-      <span style={{ position: "absolute", top: 8, left: 8, width: 12, height: 12, borderLeft: `1.5px solid var(--accent)`, borderTop: `1.5px solid var(--accent)` }} />
-      <span style={{ position: "absolute", top: 8, right: 8, width: 12, height: 12, borderRight: `1.5px solid var(--accent)`, borderTop: `1.5px solid var(--accent)` }} />
-      <span style={{ position: "absolute", bottom: 8, left: 8, width: 12, height: 12, borderLeft: `1.5px solid var(--accent)`, borderBottom: `1.5px solid var(--accent)` }} />
-      <span style={{ position: "absolute", bottom: 8, right: 8, width: 12, height: 12, borderRight: `1.5px solid var(--accent)`, borderBottom: `1.5px solid var(--accent)` }} />
-
-      {/* Live area — 32px padding on all sides */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 32,
-          // 12-col grid with 16px gutters used for column-2-vs-column-3 boundary calc
-          // gutterTotal = 11 * 16 = 176px ; colWidth = (W - 176) / 12
-          // v-rule offset from left = 2 * colWidth + 2 * 16 = 2*colWidth + 32
-        }}
-      >
-        {/* Vertical rule — between col 2 and col 3 */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            bottom: 0,
-            left: "calc((100% - 176px) / 12 * 2 + 32px)",
-            width: 0,
-            borderLeft: `1.5px dotted var(--accent-soft)`,
-          }}
-        />
-        {/* Horizontal rule — at 38% from top */}
-        <div
-          style={{
-            position: "absolute",
-            top: "38%",
-            left: 0,
-            right: 0,
-            height: 0,
-            borderTop: `1.5px solid ${ink}`,
-          }}
-        />
-
-        {/* Region A — 00.1 label */}
-        <div
-          style={{
-            position: "absolute",
-            top: 6,
-            left: 0,
-          }}
-        >
-          <div style={monoLabel}>00.1</div>
-        </div>
-
-        {/* Region B — Blurb headline */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: "calc((100% - 176px) / 12 * 2 + 32px + 16px)", // v-rule + one gutter
-            right: 0,
-            // Bottom stops 12px above the h-rule (38%)
-            height: "calc(38% - 12px)",
-            display: "flex",
-            alignItems: "flex-start",
-          }}
-        >
-          <h1
-            style={{
-              margin: 0,
-              fontFamily: "var(--font-display)",
-              fontWeight: 600,
-              fontSize: "clamp(34px, 4.25vw, 61px)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.015em",
-              color: ink,
-              textWrap: "balance",
-              whiteSpace: "pre-line",
-            }}
-          >
-            {leadHead}
-            <span style={{ fontStyle: "italic", color: accent }}>{leadMid1}</span>
-            {leadMid2}
-            <span style={{ fontStyle: "italic", color: accent }}>{leadTail}</span>
-          </h1>
-        </div>
-
-        {/* Region C — Synopsis band (full width, bracketed by 1.5px rules) */}
-        <div
-          style={{
-            position: "absolute",
-            // Start 24px below the h-rule
-            top: "calc(38% + 24px)",
-            // End 56px from the bottom of live area
-            bottom: 56,
-            left: 0,
-            // Right edge stops ~2.5 cols short to leave a strip for region D
-            right: "calc((100% - 176px) / 12 * 2.5 + 32px)",
-            display: "flex",
-            flexDirection: "column",
-            paddingTop: 12,
-            paddingBottom: 12,
-            borderTop: `1.5px dotted var(--accent-soft)`,
-            minHeight: 0,
-          }}
-        >
-          {/* Mono label, left-aligned (asymmetric balance to right-side D label) */}
-          <div
-            style={{
-              ...monoLabel,
-              marginBottom: 14,
-            }}
-          >
-            00.2
-          </div>
-          <div
-            style={{
-              fontFamily: "var(--font-body)",
-              fontSize: 13.5,
-              lineHeight: 1.55,
-              color: ink,
-              columnCount: 2,
+              columnCount: narrow ? 1 : 2,
               columnGap: 28,
-              columnRule: "1px dotted var(--accent-soft)",
-              flex: 1,
-              overflow: "hidden",
             }}
           >
             {content.intro.body.map((p, i) =>
@@ -596,10 +441,9 @@ function AboutWild({ content, leadHead, leadMid1, leadMid2, leadTail }) {
                   href={p.url}
                   data-brand={p.brand || undefined}
                   style={{
-                    color: accent,
-                    textDecoration: "underline",
-                    textDecorationThickness: "1px",
-                    textUnderlineOffset: "2px",
+                    color: ink,
+                    fontWeight: 700,
+                    textDecoration: "none",
                   }}
                 >
                   {p.label}
@@ -607,20 +451,6 @@ function AboutWild({ content, leadHead, leadMid1, leadMid2, leadTail }) {
               )
             )}
           </div>
-        </div>
-
-        {/* Region D — rotated 00.2 label crossing the synopsis top rule */}
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            top: "calc(38% + 24px - 60px)",
-            transform: "rotate(-90deg)",
-            transformOrigin: "100% 0",
-            whiteSpace: "nowrap",
-          }}
-        >
-          <span style={{ ...monoLabel, color: "var(--accent-soft)" }}>00.0 – 00.2 ABOUT</span>
         </div>
       </div>
     </section>
@@ -782,14 +612,14 @@ export function VariationBold({ content, aboutStyle = "wild" }) {
         )}
 
         <Reveal style={boldStyles.introCtaRow} delay={120}>
-          <div style={boldStyles.aside}>{c.intro.aside}</div>
           <a href={c.intro.cta.href} data-brand="hello" style={boldStyles.cta}>
             <span style={boldStyles.ctaDot} />
             {c.intro.cta.label}
           </a>
+          <div style={boldStyles.aside}>{c.intro.aside}</div>
         </Reveal>
 
-        <div style={boldStyles.sectionSpacer} />
+        <div style={boldStyles.sectionSpacerTight} />
 
         {/* Timeline */}
         <div style={boldStyles.sectionLabel}>01</div>
@@ -809,7 +639,7 @@ export function VariationBold({ content, aboutStyle = "wild" }) {
         {/* Featured */}
         <div style={boldStyles.sectionLabel}>02</div>
         <Reveal as="h2" style={boldStyles.sectionTitle}>
-          Featured
+          Featured work
         </Reveal>
         <FeaturedList items={c.featured || []} />
 
@@ -843,6 +673,16 @@ export function VariationBold({ content, aboutStyle = "wild" }) {
             </Reveal>
           ))}
         </ul>
+
+        <div style={boldStyles.sectionSpacer} />
+
+        <Reveal style={{ ...boldStyles.introCtaRow, borderTop: "1px solid var(--rule)", paddingTop: "clamp(28px, 4.2vw, 56px)" }}>
+          <a href={c.intro.cta.href} data-brand="hello" style={boldStyles.cta}>
+            <span style={boldStyles.ctaDot} />
+            {c.intro.cta.label}
+          </a>
+          <div style={boldStyles.aside}>{c.intro.aside}</div>
+        </Reveal>
 
         <footer style={boldStyles.footer}>
           <div>© {new Date().getFullYear()} · Adam Glynn-Finnegan</div>

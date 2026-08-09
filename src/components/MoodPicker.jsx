@@ -75,19 +75,9 @@ export function MoodPicker({ accent, accentsForTheme, onAccentChange, mode, onMo
             );
           })}
         </div>
-        <div style={{ marginLeft: "auto" }}>
-          <button
-            type="button"
-            onClick={() => onModeChange("read")}
-            style={{
-              ...segBtn(mode === "read"),
-              border: "1px solid var(--rule)",
-              borderRadius: 999,
-              padding: "6px 16px",
-            }}
-          >
-            Readable
-          </button>
+        <div style={{ ...segWrap, marginLeft: "auto" }}>
+          <button type="button" style={segBtn(mode === "view")} onClick={() => onModeChange("view")}>View</button>
+          <button type="button" style={segBtn(mode === "read")} onClick={() => onModeChange("read")}>Readable</button>
         </div>
       </div>
     </div>

@@ -23,9 +23,6 @@ export function ThemeVars({ theme, accent, fontPair }) {
   const vars = {
     ...pal,
     "--accent": accent,
-    "--accent-soft": theme === "dark"
-      ? `color-mix(in oklch, ${accent} 55%, #1a1a1a)`
-      : `color-mix(in oklch, ${accent} 35%, white)`,
     "--font-display": pair.display,
     "--font-body": pair.body,
   };

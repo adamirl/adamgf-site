@@ -8,7 +8,12 @@ export const SITE_CONTENT = {
     title: "Adam Glynn-Finnegan — Designer",
     tagline: "",
     address: [],
-    signatureGif: "/assets/adamgf-signature.gif",
+    // BASE_URL is Vite's configured `base` (e.g. "/adamgf-site/" on a GitHub
+    // Pages project page, or "/" once on the custom domain) — a plain string
+    // literal here would silently 404 whenever the site isn't served from
+    // the domain root, which is exactly what happened after the move to
+    // github.io/adamgf-site/.
+    signatureGif: `${import.meta.env.BASE_URL}assets/adamgf-signature.gif`,
   },
 
   intro: {
@@ -24,14 +29,17 @@ export const SITE_CONTENT = {
       " where I created products that made travel easier — and more inspiring — to plan and book. I have also established the design practice at several early-stage startups with three acquisitions. Though I am currently living on the West Coast of the US, I still wake up at 5am throughout the year to watch Ireland rugby matches.",
     ],
     aside: "I would be happy to share case studies on request.",
-    cta: { label: "Say hello", href: "mailto:info@adamgf.com?subject=Hi!" },
+    cta: { label: "Say hello!", href: "mailto:info@adamgf.com?subject=Hi!" },
   },
 
+  // `location` and `detail` only render on the Readable page (see
+  // VariationSafe.jsx). Fill these in — location is where you lived during
+  // that role, detail is a line on notable projects/teams.
   timeline: [
-    { years: "2021 —",        place: "Netflix"  },
-    { years: "2020 → 2021",   place: "Flux"     },
-    { years: "2015 → 2020",   place: "Airbnb"   },
-    { years: "2011 → 2015",   place: "Evernote" },
+    { years: "2021 —",        place: "Netflix",  location: "", detail: "" },
+    { years: "2020 → 2021",   place: "Flux",     location: "", detail: "" },
+    { years: "2015 → 2020",   place: "Airbnb",   location: "", detail: "" },
+    { years: "2011 → 2015",   place: "Evernote", location: "", detail: "" },
   ],
 
   featured: [
@@ -40,8 +48,8 @@ export const SITE_CONTENT = {
     { title: "Games launch",               company: "Netflix"  },
     { title: "Trust Map",                  company: "Airbnb"   },
     { title: "Design System",              company: "Airbnb"   },
-    { title: "Android app",                company: "Airbnb"   },
-    { title: "Android app",                company: "Evernote" },
+    { title: "Airbnb app",                 company: "Airbnb"   },
+    { title: "Evernote app",               company: "Evernote" },
     { title: "Remember Everything",        company: "the Evernote brand" },
   ],
 
@@ -68,6 +76,7 @@ export const SITE_CONTENT = {
     social: [
       { label: "Email",    href: "mailto:info@adamgf.com" },
       { label: "LinkedIn", href: "#" },
+      { label: "VSCO",     href: "#" },
     ],
   },
 };

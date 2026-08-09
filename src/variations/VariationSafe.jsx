@@ -48,7 +48,7 @@ const safeStyles = {
   lead: {
     fontFamily: "var(--font-display)",
     fontWeight: 400,
-    fontSize: "clamp(26px, 3.6vw, 48px)",
+    fontSize: "clamp(19px, 3.6vw, 48px)",
     lineHeight: 1.12,
     letterSpacing: "-0.015em",
     marginBottom: "clamp(32px, 5vw, 56px)",
@@ -111,6 +111,21 @@ const safeStyles = {
     fontWeight: 400,
     fontSize: "clamp(28px, 3.2vw, 40px)",
     letterSpacing: "-0.01em",
+  },
+  timelineLocation: {
+    fontFamily: "var(--font-body)",
+    fontStyle: "italic",
+    fontSize: "clamp(13px, 1.1vw, 15px)",
+    color: "var(--fg-muted)",
+    marginTop: 6,
+  },
+  timelineDetail: {
+    fontFamily: "var(--font-body)",
+    fontSize: "clamp(14px, 1.2vw, 16px)",
+    color: "var(--fg)",
+    lineHeight: 1.5,
+    marginTop: 10,
+    maxWidth: 640,
   },
   writingBlurb: {
     fontFamily: "var(--font-body)",
@@ -242,7 +257,15 @@ export function VariationSafe({ content }) {
                     </React.Fragment>
                   ) : row.years}
                 </div>
-                <div style={safeStyles.timelinePlace}>{row.place}</div>
+                <div>
+                  <div style={safeStyles.timelinePlace}>{row.place}</div>
+                  {row.location && (
+                    <div style={safeStyles.timelineLocation}>{row.location}</div>
+                  )}
+                  {row.detail && (
+                    <div style={safeStyles.timelineDetail}>{row.detail}</div>
+                  )}
+                </div>
               </div>
             </Reveal>
           ))}
@@ -279,6 +302,17 @@ export function VariationSafe({ content }) {
           ))}
         </ul>
       </section>
+
+      <div style={safeStyles.rule}>—</div>
+
+      <Reveal>
+        <p style={safeStyles.aside}>{c.intro.aside}</p>
+        <div style={safeStyles.ctaWrap}>
+          <a href={c.intro.cta.href} data-brand="hello" style={safeStyles.cta}>
+            {c.intro.cta.label} →
+          </a>
+        </div>
+      </Reveal>
 
       <footer style={safeStyles.footer}>
         <div>© {new Date().getFullYear()} Adam Glynn-Finnegan</div>
