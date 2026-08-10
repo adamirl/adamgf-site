@@ -6,6 +6,12 @@
 import React from "react";
 import { Reveal } from "../components/Reveal.jsx";
 
+// External (http/https) links open in a new tab; mailto and in-page anchors don't.
+const extProps = (href) =>
+  href && /^https?:\/\//.test(href)
+    ? { target: "_blank", rel: "noopener noreferrer" }
+    : {};
+
 const safeStyles = {
   page: {
     minHeight: "100vh",
@@ -179,6 +185,7 @@ function SafeLink({ href, children, brand }) {
     <a
       href={href}
       data-brand={brand || undefined}
+      {...extProps(href)}
       style={{
         color: "var(--accent)",
         textDecoration: "underline",
@@ -286,7 +293,12 @@ export function VariationSafe({ content, theme = "light" }) {
           <p style={safeStyles.writingBlurb}>{c.writing.blurb}</p>
         </Reveal>
         <div style={safeStyles.ctaWrap}>
-          <a href={c.writing.marqueeHref || "#"} style={safeStyles.cta}>
+          <a
+            href={c.writing.marqueeHref || "#"}
+            data-brand="netflix"
+            {...extProps(c.writing.marqueeHref)}
+            style={safeStyles.cta}
+          >
             Read my latest article →
           </a>
         </div>
@@ -325,6 +337,7 @@ export function VariationSafe({ content, theme = "light" }) {
             <a
               key={i}
               href={s.href}
+              {...extProps(s.href)}
               style={safeStyles.socialLink}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = "var(--accent)";

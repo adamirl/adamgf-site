@@ -78,8 +78,8 @@ export const SITE_CONTENT = {
     email: "info@adamgf.com",
     social: [
       { label: "Email",    href: "mailto:info@adamgf.com" },
-      { label: "LinkedIn", href: "#" },
-      { label: "VSCO",     href: "#" },
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/adamgf/" },
+      { label: "VSCO",     href: "https://vsco.co/adamgf/gallery" },
     ],
   },
 };

@@ -5,6 +5,12 @@
 import React from "react";
 import { Reveal } from "../components/Reveal.jsx";
 
+// External (http/https) links open in a new tab; mailto and in-page anchors don't.
+const extProps = (href) =>
+  href && /^https?:\/\//.test(href)
+    ? { target: "_blank", rel: "noopener noreferrer" }
+    : {};
+
 const boldStyles = {
   page: {
     minHeight: "100vh",
@@ -244,6 +250,14 @@ const boldStyles = {
     width: 320,
     height: 220,
     background: "#000",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "rgba(255,255,255,0.65)",
+    fontFamily: "var(--font-mono, monospace)",
+    fontSize: 12,
+    letterSpacing: "0.14em",
+    textTransform: "uppercase",
     pointerEvents: "none",
     zIndex: 40,
     opacity: 0,
@@ -313,6 +327,7 @@ function BoldLink({ href, children, brand }) {
     <a
       href={href}
       data-brand={brand || undefined}
+      {...extProps(href)}
       style={{
         color: "var(--accent)",
         textDecoration: "underline",
@@ -455,6 +470,7 @@ function AboutWild({ content, leadHead, leadMid1, leadMid2, leadTail }) {
                   key={i}
                   href={p.url}
                   data-brand={p.brand || undefined}
+                  {...extProps(p.url)}
                   style={{
                     color: ink,
                     fontWeight: 700,
@@ -571,7 +587,9 @@ function FeaturedList({ items }) {
           </div>
         );
       })}
-      <div ref={previewRef} aria-hidden="true" style={boldStyles.featuredPreview} />
+      <div ref={previewRef} aria-hidden="true" style={boldStyles.featuredPreview}>
+        Content coming soon
+      </div>
     </div>
   );
 }
@@ -672,7 +690,12 @@ export function VariationBold({ content, aboutStyle = "wild", theme = "light" })
         <Reveal style={boldStyles.writingBody}>
           <p>{c.writing.blurb}</p>
           <p style={{ marginTop: 24 }}>
-            <a href={c.writing.marqueeHref || "#"} style={{ color: "var(--accent)", textDecoration: "none" }}>
+            <a
+              href={c.writing.marqueeHref || "#"}
+              data-brand="netflix"
+              {...extProps(c.writing.marqueeHref)}
+              style={{ color: "var(--accent)", textDecoration: "none" }}
+            >
               Read my latest article →
             </a>
           </p>
@@ -710,6 +733,7 @@ export function VariationBold({ content, aboutStyle = "wild", theme = "light" })
               <a
                 key={i}
                 href={s.href}
+                {...extProps(s.href)}
                 style={{
                   color: "var(--fg-muted)",
                   textDecoration: "none",
