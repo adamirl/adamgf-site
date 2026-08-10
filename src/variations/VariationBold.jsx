@@ -39,7 +39,7 @@ const boldStyles = {
   sigImg: {
     width: "min(100%, 420px)",
     height: "auto",
-    mixBlendMode: "multiply",
+    mixBlendMode: "var(--sig-blend)",
     filter: "var(--sig-filter)",
   },
   tagline: {
@@ -212,7 +212,12 @@ const boldStyles = {
     columnGap: 24,
     alignItems: "baseline",
     padding: "clamp(20px, 3vw, 36px) 0",
-    borderTop: "1px dotted var(--rule)",
+    // Dotted rule with custom (~2x) dot spacing — a real border can't control
+    // the gap, so we paint dots with a repeating radial-gradient at the top.
+    backgroundImage: "radial-gradient(circle, var(--rule) 1px, transparent 1px)",
+    backgroundSize: "6px 2px",
+    backgroundRepeat: "repeat-x",
+    backgroundPosition: "left top",
     cursor: "default",
     position: "relative",
     transition: "color .25s ease, opacity .25s ease",
@@ -269,7 +274,12 @@ const boldStyles = {
     lineHeight: 1.55,
     color: "var(--fg)",
     paddingBottom: 14,
-    borderBottom: "1px dotted var(--rule)",
+    // Dotted rule with custom (~2x) dot spacing — see featuredRow. Painted at
+    // the bottom of each award cell.
+    backgroundImage: "radial-gradient(circle, var(--rule) 1px, transparent 1px)",
+    backgroundSize: "6px 2px",
+    backgroundRepeat: "repeat-x",
+    backgroundPosition: "left bottom",
   },
   footer: {
     gridColumn: "1 / -1",

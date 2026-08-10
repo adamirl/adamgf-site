@@ -24,7 +24,7 @@ const safeStyles = {
   sig: {
     height: "clamp(56px, 9vw, 96px)",
     width: "auto",
-    mixBlendMode: "multiply",
+    mixBlendMode: "var(--sig-blend)",
     filter: "var(--sig-filter)",
   },
   address: {

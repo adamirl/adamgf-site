@@ -10,6 +10,9 @@ export function ThemeVars({ theme, accent, fontPair }) {
     "--fg-muted": "#6B665C",
     "--rule": "rgba(27,26,23,0.18)",
     "--sig-filter": "none",
+    // multiply shows the dark signature and drops its white/transparent halo on
+    // the light background.
+    "--sig-blend": "multiply",
   };
   const dark = {
     "--bg": "#14120F",
@@ -19,6 +22,10 @@ export function ThemeVars({ theme, accent, fontPair }) {
     "--rule": "rgba(239,232,216,0.18)",
     // No filter — dark mode now uses the pre-inverted signatureGifDark asset.
     "--sig-filter": "none",
+    // screen is multiply's mirror: shows the white signature and drops its
+    // dark/transparent halo on the dark background. (multiply would crush the
+    // white logo to black here.)
+    "--sig-blend": "screen",
   };
   const pal = theme === "dark" ? dark : light;
   const vars = {
