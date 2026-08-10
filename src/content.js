@@ -60,7 +60,7 @@ export const SITE_CONTENT = {
     blurb:
       "I have written on design for Wired, Fast Company & Creative Review as well as features in design books like the ‘A Book Apart’ collection.",
     marquee: "Latest Article  〰️  Read it here  〰️",
-    marqueeHref: "#",
+    marqueeHref: "https://www.uxdesigninstitute.com/blog/netflix-product-design-interview/",
   },
 
   awards: [
