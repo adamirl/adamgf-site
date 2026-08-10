@@ -212,7 +212,7 @@ const boldStyles = {
     columnGap: 24,
     alignItems: "baseline",
     padding: "clamp(20px, 3vw, 36px) 0",
-    borderTop: "1px solid var(--rule)",
+    borderTop: "1px dotted var(--rule)",
     cursor: "default",
     position: "relative",
     transition: "color .25s ease, opacity .25s ease",
@@ -269,7 +269,7 @@ const boldStyles = {
     lineHeight: 1.55,
     color: "var(--fg)",
     paddingBottom: 14,
-    borderBottom: "1px solid var(--rule)",
+    borderBottom: "1px dotted var(--rule)",
   },
   footer: {
     gridColumn: "1 / -1",
@@ -290,6 +290,11 @@ const boldStyles = {
   sectionSpacer: {
     gridColumn: "1 / -1",
     height: "clamp(80px, 12vw, 160px)",
+  },
+  // Half of sectionSpacer — used only between Writing (03) and Awards (04).
+  sectionSpacerHalf: {
+    gridColumn: "1 / -1",
+    height: "clamp(40px, 6vw, 80px)",
   },
 };
 
@@ -561,8 +566,12 @@ function FeaturedList({ items }) {
   );
 }
 
-export function VariationBold({ content, aboutStyle = "wild" }) {
+export function VariationBold({ content, aboutStyle = "wild", theme = "light" }) {
   const c = content;
+  const signatureSrc =
+    theme === "dark" && c.meta.signatureGifDark
+      ? c.meta.signatureGifDark
+      : c.meta.signatureGif;
   // Split lead for accent-italic last word.
   // Line breaks (per spec): after "Glynn-Finnegan," and before "building".
   // Italicized in accent color: "memorable" and the trailing "brands."
@@ -581,7 +590,7 @@ export function VariationBold({ content, aboutStyle = "wild" }) {
         <div style={{ ...boldStyles.sigLabel, whiteSpace: "nowrap" }}>00 – LOGO</div>
         <div style={boldStyles.sigHero}>
           <img
-            src={c.meta.signatureGif}
+            src={signatureSrc}
             alt="adamGF"
             style={boldStyles.sigImg}
           />
@@ -659,7 +668,7 @@ export function VariationBold({ content, aboutStyle = "wild" }) {
           </p>
         </Reveal>
 
-        <div style={boldStyles.sectionSpacer} />
+        <div style={boldStyles.sectionSpacerHalf} />
 
         {/* Awards */}
         <div style={boldStyles.sectionLabel}>04</div>

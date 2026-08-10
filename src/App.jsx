@@ -54,7 +54,7 @@ export default function App() {
           update({ theme: t, accent: nextAccent, variation: "bold", aboutStyle: "wild" });
         }}
       />
-      <Variation content={SITE_CONTENT} aboutStyle={state.aboutStyle} />
+      <Variation content={SITE_CONTENT} aboutStyle={state.aboutStyle} theme={state.theme} />
     </React.Fragment>
   );
 }

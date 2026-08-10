@@ -206,13 +206,17 @@ export function renderBody(parts) {
   );
 }
 
-export function VariationSafe({ content }) {
+export function VariationSafe({ content, theme = "light" }) {
   const c = content;
+  const signatureSrc =
+    theme === "dark" && c.meta.signatureGifDark
+      ? c.meta.signatureGifDark
+      : c.meta.signatureGif;
   return (
     <div style={safeStyles.page}>
       <header style={safeStyles.topBar}>
         <a href="#top" aria-label="AdamGF home" style={{ lineHeight: 0 }}>
-          <img src={c.meta.signatureGif} alt="adamGF" style={safeStyles.sig} />
+          <img src={signatureSrc} alt="adamGF" style={safeStyles.sig} />
         </a>
         <address style={safeStyles.address}>
           {c.meta.address.map((l, i) => (

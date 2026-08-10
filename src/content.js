@@ -14,6 +14,9 @@ export const SITE_CONTENT = {
     // the domain root, which is exactly what happened after the move to
     // github.io/adamgf-site/.
     signatureGif: `${import.meta.env.BASE_URL}assets/adamgf-signature.gif`,
+    // Pre-inverted (white) signature used only on the dark theme, so we no
+    // longer need the CSS invert() hack (see --sig-filter in ThemeVars).
+    signatureGifDark: `${import.meta.env.BASE_URL}assets/adamgf_signature_dark.gif`,
   },
 
   intro: {

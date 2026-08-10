@@ -17,7 +17,8 @@ export function ThemeVars({ theme, accent, fontPair }) {
     "--fg": "#EFE8D8",
     "--fg-muted": "#908878",
     "--rule": "rgba(239,232,216,0.18)",
-    "--sig-filter": "invert(0.94)",
+    // No filter — dark mode now uses the pre-inverted signatureGifDark asset.
+    "--sig-filter": "none",
   };
   const pal = theme === "dark" ? dark : light;
   const vars = {
