@@ -1,7 +1,7 @@
 import React from "react";
 import { BRAND_MESH } from "../constants.js";
 
-export function CursorFollower({ effect, radius, hoverMultiplier, theme, brandMesh }) {
+export function CursorFollower({ effect, radius, hoverMultiplier, theme, brandMesh, hoverReactive = true }) {
   const ref = React.useRef(null);
   const [ripples, setRipples] = React.useState([]);
   const [enabled] = React.useState(
@@ -24,16 +24,18 @@ export function CursorFollower({ effect, radius, hoverMultiplier, theme, brandMe
       tx = e.clientX;
       ty = e.clientY;
       const target = e.target instanceof Element ? e.target : null;
-      const over = target ? target.closest("a, button, [data-hover]") : null;
+      const over = hoverReactive && target ? target.closest("a, button, [data-hover]") : null;
       const isChrome =
         over &&
         (over.hasAttribute("data-cursor-ignore") ||
           over.closest("[data-cursor-ignore]"));
       tScale = over && !isChrome ? hoverMultiplier : 1;
 
-      // Brand-reactive mesh: detect data-brand on hovered link
+      // Brand-reactive mesh: detect data-brand on hovered link. When not
+      // hover-reactive (Readable view), brandEl stays null so the else branch
+      // clears any brand color left over from the other view.
       if (brandMesh && effect === "mesh") {
-        const brandEl = target ? target.closest("[data-brand]") : null;
+        const brandEl = hoverReactive && target ? target.closest("[data-brand]") : null;
         const brand = brandEl ? brandEl.getAttribute("data-brand") : null;
         const el = ref.current;
         if (el) {
@@ -70,7 +72,7 @@ export function CursorFollower({ effect, radius, hoverMultiplier, theme, brandMe
       window.removeEventListener("mousemove", onMove);
       cancelAnimationFrame(raf);
     };
-  }, [enabled, effect, hoverMultiplier, brandMesh]);
+  }, [enabled, effect, hoverMultiplier, brandMesh, hoverReactive]);
 
   // Ripple mode: spawn ring on movement (throttled)
   React.useEffect(() => {

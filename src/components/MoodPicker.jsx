@@ -77,7 +77,39 @@ export function MoodPicker({ accent, accentsForTheme, onAccentChange, mode, onMo
         </div>
         <div style={{ ...segWrap, marginLeft: "auto" }}>
           <button type="button" style={segBtn(mode === "view")} onClick={() => onModeChange("view")}>View</button>
-          <button type="button" style={segBtn(mode === "read")} onClick={() => onModeChange("read")}>Readable</button>
+          <button
+            type="button"
+            style={{ ...segBtn(mode === "read"), display: "inline-flex", alignItems: "center", gap: 7 }}
+            onClick={() => onModeChange("read")}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 11 11"
+              fill="currentColor"
+              shapeRendering="crispEdges"
+              aria-hidden="true"
+              style={{ flexShrink: 0 }}
+            >
+              <rect x="2" y="2" width="1" height="1" />
+              <rect x="8" y="2" width="1" height="1" />
+              <rect x="3" y="3" width="1" height="1" />
+              <rect x="7" y="3" width="1" height="1" />
+              <rect x="2" y="4" width="7" height="1" />
+              <rect x="1" y="5" width="2" height="1" />
+              <rect x="4" y="5" width="3" height="1" />
+              <rect x="8" y="5" width="2" height="1" />
+              <rect x="0" y="6" width="11" height="1" />
+              <rect x="0" y="7" width="1" height="1" />
+              <rect x="2" y="7" width="7" height="1" />
+              <rect x="10" y="7" width="1" height="1" />
+              <rect x="0" y="8" width="1" height="1" />
+              <rect x="2" y="8" width="1" height="1" />
+              <rect x="8" y="8" width="1" height="1" />
+              <rect x="10" y="8" width="1" height="1" />
+            </svg>
+            Readable
+          </button>
         </div>
       </div>
     </div>

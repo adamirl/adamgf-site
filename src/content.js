@@ -39,10 +39,44 @@ export const SITE_CONTENT = {
   // VariationSafe.jsx). Fill these in — location is where you lived during
   // that role, detail is a line on notable projects/teams.
   timeline: [
-    { years: "2021 —",        place: "Netflix",  location: "", detail: "" },
-    { years: "2020 → 2021",   place: "Flux",     location: "", detail: "" },
-    { years: "2015 → 2020",   place: "Airbnb",   location: "", detail: "" },
-    { years: "2011 → 2015",   place: "Evernote", location: "", detail: "" },
+    {
+      years: "2021 —",
+      place: "Netflix",
+      location: "Los Angeles, CA",
+      detail:
+        "I lead the Localization design team, helping make Netflix feel immersive no matter what language you speak. My team designs the post-production and creator tools used for TV and film productions across the globe, translating our content into 50+ languages. Previously I was the Staff Designer for the Content suite, designing tools to launch the Games business in 2021 and the Ads business in 2023, and leading major shifts in personalization and content discovery. I built the foundational AI and LLM UX systems for content tagging, ad targeting, and subtitle and dubbing creation.",
+    },
+    {
+      years: "2021 —",
+      place: "Investing",
+      location: "",
+      // readableOnly: renders on the Readable page (VariationSafe) but is
+      // filtered out of the Bold "View" timeline.
+      readableOnly: true,
+      detail:
+        "I invest in early-stage companies, bringing the experience of having built the design practice at several startups with three acquisitions to the founders I back. I'm especially drawn to companies building design tools (Figma, Webflow) and to industries where great user experience is pivotal to disruption (Healthcare tech and AI).",
+    },
+    {
+      years: "2020 → 2021",
+      place: "Flux",
+      location: "San Francisco, CA & Portland, OR",
+      detail:
+        "Head of Design at an early-stage startup, where I led the design of a completely new, AI-first approach to career development and hiring. Acquired by Beamery in 2022.",
+    },
+    {
+      years: "2015 → 2020",
+      place: "Airbnb",
+      location: "San Francisco, CA",
+      detail:
+        "I joined the team that introduced Airbnb's first design system. I led design on the homepage experience for two years, driving large increases in the core metric of nights booked through investments in Search and Discovery and steady improvements to the booking flow. My work on the Android app won Airbnb the Google Design Award in 2016. I later owned the identity and verification surfaces, including profiles and reviews, as we reorganized Trust and Safety into a vision-led group focused on Trust.",
+    },
+    {
+      years: "2011 → 2015",
+      place: "Evernote",
+      location: "London, UK & Mountain View, CA",
+      detail:
+        "I was the company's first employee in Europe and led design for all web and marketing, helping the startup grow from 5 million to 150 million users in three years. I developed the global Evernote brand, launched websites in 22 languages, and built the first design system. I then moved from branding into product leadership, designing the Android and iOS apps and winning a Google Design Award.",
+    },
   ],
 
   featured: [

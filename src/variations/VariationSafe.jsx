@@ -193,8 +193,6 @@ function SafeLink({ href, children, brand }) {
         textDecorationThickness: "1px",
         textUnderlineOffset: "3px",
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.textDecorationThickness = "2px")}
-      onMouseLeave={(e) => (e.currentTarget.style.textDecorationThickness = "1px")}
     >
       {children}
     </a>
@@ -339,14 +337,6 @@ export function VariationSafe({ content, theme = "light" }) {
               href={s.href}
               {...extProps(s.href)}
               style={safeStyles.socialLink}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = "var(--accent)";
-                e.currentTarget.style.borderBottomColor = "var(--accent)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = "var(--fg-muted)";
-                e.currentTarget.style.borderBottomColor = "transparent";
-              }}
             >
               {s.label}
             </a>

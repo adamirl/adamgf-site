@@ -664,7 +664,7 @@ export function VariationBold({ content, aboutStyle = "wild", theme = "light" })
           Timeline
         </Reveal>
         <div style={boldStyles.timelineList}>
-          {c.timeline.map((row, i) => (
+          {c.timeline.filter((row) => !row.readableOnly).map((row, i) => (
             <Reveal key={i} delay={i * 80}>
               <TimelineRow row={row} />
             </Reveal>

@@ -26,6 +26,9 @@ export default function App() {
         hoverMultiplier={state.cursorHoverMultiplier}
         theme={state.theme}
         brandMesh={state.brandMesh}
+        // Readable view: keep the cursor mesh, but don't let it react to
+        // links (no scale-up, no brand color shift on hover).
+        hoverReactive={state.variation !== "safe"}
       />
       <MoodPicker
         accent={state.accent}
