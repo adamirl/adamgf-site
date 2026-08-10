@@ -1,17 +1,13 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// Currently deployed at github.io/adamgf-site/ (a GitHub Pages *project* page,
-// not a custom domain yet), so base must match the repo name.
-//
-// When cutting over to the custom domain (www.adamgf.com):
-//   1. Point DNS: CNAME record "www" -> "<user>.github.io"
-//   2. Set base back to "/"
-//   3. Restore public/CNAME with "www.adamgf.com" (see public/CNAME.disabled)
-//   4. Push — the existing GitHub Actions workflow redeploys automatically
+// Served at the custom domain www.adamgf.com, so base is the domain root.
+// public/CNAME (contents "www.adamgf.com") tells GitHub Pages the custom
+// domain on each deploy. If you ever revert to the github.io/adamgf-site/
+// project URL, set base back to "/adamgf-site/" and disable public/CNAME.
 export default defineConfig({
   plugins: [react()],
-  base: "/adamgf-site/",
+  base: "/",
   build: {
     outDir: "dist",
   },
