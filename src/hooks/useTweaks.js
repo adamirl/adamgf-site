@@ -10,6 +10,11 @@ export function useTweaks() {
       const merged = { ...TWEAK_DEFAULTS, ...(saved || {}) };
       // Safety: never boot with cursor off — that's confusing if you forget.
       if (merged.cursorEffect === "off") merged.cursorEffect = "mesh";
+      // Every fresh landing starts in "view" (bold), never Readable — even for
+      // returning visitors who last left it on Readable. Other saved prefs
+      // (theme, font, cursor) are kept; only the view/read mode is reset.
+      merged.variation = "bold";
+      merged.aboutStyle = "wild";
       return merged;
     } catch {
       return { ...TWEAK_DEFAULTS };
