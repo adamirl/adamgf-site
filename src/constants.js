@@ -49,7 +49,8 @@ export const TWEAK_DEFAULTS = {
 
 // Hex trios keyed by brand — main color first, then two harmonics.
 export const BRAND_MESH = {
-  airbnb:  ["#FF5A5F", "#FF8A5C", "#FFC0B8"],
+  // Two-tone Airbnb gradient: #ff385c → #ff5a5f, with a computed midpoint.
+  airbnb:  ["#FF385C", "#FF495E", "#FF5A5F"],
   flux:    ["#1D63DC", "#4FA3FF", "#B8D4FF"],
   netflix: ["#E50914", "#831010", "#FF4D4D"],
   hello:   ["#ff4b1f", "#ffa07a", "#ffe1c2"],

@@ -25,11 +25,11 @@ export const SITE_CONTENT = {
     body: [
       "I am an accomplished design leader, currently heading up ",
       { label: "Netflix", url: "https://www.netflix.com", brand: "netflix" },
-      " Localization — building the world’s best entertainment studio. Prior to that I was Head of Design at ",
+      " Localization – building the world’s best entertainment studio. Prior to that I was Head of Design at ",
       { label: "Flux", url: "https://www.beamery.com", brand: "flux" },
       ", creating a product that helps people grow their careers. Previously I was a Design leader at ",
       { label: "Airbnb", url: "https://www.airbnb.com", brand: "airbnb" },
-      " where I created products that made travel easier — and more inspiring — to plan and book. I have also established the design practice at several early-stage startups with three acquisitions. Though I am currently living on the West Coast of the US, I still wake up at 5am throughout the year to watch Ireland rugby matches.",
+      " where I created products that made travel easier – and more inspiring – to plan and book. I have also established the design practice at several early-stage startups with three acquisitions. Though I am currently living on the West Coast of the US, I still wake up at 5am throughout the year to watch Ireland rugby matches.",
     ],
     aside: "I would be happy to share case studies on request.",
     cta: { label: "Say hello!", href: "mailto:info@adamgf.com?subject=Hi!" },

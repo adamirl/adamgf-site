@@ -293,7 +293,7 @@ export function VariationSafe({ content, theme = "light" }) {
         <div style={safeStyles.ctaWrap}>
           <a
             href={c.writing.marqueeHref || "#"}
-            data-brand="netflix"
+            data-brand="hello"
             {...extProps(c.writing.marqueeHref)}
             style={safeStyles.cta}
           >

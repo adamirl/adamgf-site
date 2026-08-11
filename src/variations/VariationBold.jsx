@@ -359,6 +359,102 @@ function renderBoldBody(parts) {
   );
 }
 
+// Hover target: while the cursor is over the name, a rotating headshot gif
+// fades in and trails the pointer. No text decoration — the gif is the whole
+// affordance. View-mode only (this component is bold-only), never Readable.
+function NameFollower({ name }) {
+  const imgRef = React.useRef(null);
+  const rafRef = React.useRef(null);
+  const pos = React.useRef({ tx: 0, ty: 0, cx: 0, cy: 0 });
+  const spinSrc = `${import.meta.env.BASE_URL}assets/agf-spin-bw.gif`;
+
+  const place = (el, x, y) => {
+    el.style.left = x + 26 + "px"; // up-and-right of the pointer
+    el.style.top = y - 26 + "px";
+  };
+
+  const tick = () => {
+    const p = pos.current;
+    p.cx += (p.tx - p.cx) * 0.2; // eased trail
+    p.cy += (p.ty - p.cy) * 0.2;
+    if (imgRef.current) place(imgRef.current, p.cx, p.cy);
+    rafRef.current = requestAnimationFrame(tick);
+  };
+
+  const onMove = (e) => {
+    pos.current.tx = e.clientX;
+    pos.current.ty = e.clientY;
+  };
+
+  const handleEnter = (e) => {
+    const p = pos.current;
+    p.tx = p.cx = e.clientX;
+    p.ty = p.cy = e.clientY;
+    const el = imgRef.current;
+    if (el) {
+      place(el, p.cx, p.cy);
+      el.style.opacity = "1";
+      el.style.transform = "translate(-50%, -50%) scale(1)";
+    }
+    window.addEventListener("mousemove", onMove);
+    if (!rafRef.current) rafRef.current = requestAnimationFrame(tick);
+  };
+
+  const handleLeave = () => {
+    const el = imgRef.current;
+    if (el) {
+      el.style.opacity = "0";
+      el.style.transform = "translate(-50%, -50%) scale(0.7)";
+    }
+    window.removeEventListener("mousemove", onMove);
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
+  };
+
+  React.useEffect(
+    () => () => {
+      window.removeEventListener("mousemove", onMove);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    },
+    []
+  );
+
+  return (
+    <React.Fragment>
+      <span onMouseEnter={handleEnter} onMouseLeave={handleLeave} style={{ cursor: "default" }}>
+        {name}
+      </span>
+      <img
+        ref={imgRef}
+        src={spinSrc}
+        alt=""
+        aria-hidden="true"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: 70,
+          height: 70,
+          borderRadius: "50%",
+          pointerEvents: "none",
+          zIndex: 9999,
+          opacity: 0,
+          transform: "translate(-50%, -50%) scale(0.7)",
+          transition: "opacity .18s ease, transform .18s ease",
+          boxShadow: "0 8px 30px rgba(0,0,0,.28)",
+          // Feather the outer edge so the cutout's faint white ring dissolves
+          // into whatever's behind it (works on both light and dark).
+          WebkitMaskImage: "radial-gradient(circle, #000 96%, transparent 99.5%)",
+          maskImage: "radial-gradient(circle, #000 96%, transparent 99.5%)",
+          willChange: "transform, opacity",
+        }}
+      />
+    </React.Fragment>
+  );
+}
+
 function AboutWild({ content, leadHead, leadMid1, leadMid2, leadTail }) {
   // Editorial layout: mono section labels + headline + a solid divider
   // crossed by a rotated "ABOUT" label + a synopsis paragraph.
@@ -426,7 +522,19 @@ function AboutWild({ content, leadHead, leadMid1, leadMid2, leadTail }) {
             whiteSpace: "pre-line",
           }}
         >
-          {leadHead}
+          {(() => {
+            // Wrap just "Adam Glynn-Finnegan" so it becomes the hover target.
+            const NAME = "Adam Glynn-Finnegan";
+            const i = leadHead.indexOf(NAME);
+            if (i < 0) return leadHead;
+            return (
+              <React.Fragment>
+                {leadHead.slice(0, i)}
+                <NameFollower name={NAME} />
+                {leadHead.slice(i + NAME.length)}
+              </React.Fragment>
+            );
+          })()}
           <span style={{ fontStyle: "italic", color: accent }}>{leadMid1}</span>
           {leadMid2}
           <span style={{ fontStyle: "italic", color: accent }}>{leadTail}</span>
@@ -692,7 +800,7 @@ export function VariationBold({ content, aboutStyle = "wild", theme = "light" })
           <p style={{ marginTop: 24 }}>
             <a
               href={c.writing.marqueeHref || "#"}
-              data-brand="netflix"
+              data-brand="hello"
               {...extProps(c.writing.marqueeHref)}
               style={{ color: "var(--accent)", textDecoration: "none" }}
             >
