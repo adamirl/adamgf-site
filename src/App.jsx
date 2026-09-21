@@ -8,6 +8,10 @@ import { useTweaks } from "./hooks/useTweaks.js";
 import { ACCENTS_BY_THEME } from "./constants.js";
 import { SITE_CONTENT } from "./content.js";
 
+// Readable stays monochrome — its accent just matches body text per theme,
+// rather than picking up one of the bold view's brand colors.
+const READABLE_ACCENT = { light: "#000000", dark: "#EFE8D8" };
+
 // Matches the same 720px cutoff VariationBold uses for its "narrow" layout.
 function useIsMobile(query = "(max-width: 720px)") {
   const read = () =>
@@ -63,19 +67,20 @@ export default function App() {
               const nextAccent = valid.includes(state.accent) ? state.accent : valid[0];
               update({ variation: "bold", aboutStyle: "wild", accent: nextAccent });
             } else {
-              // Readable: black accent on light theme
-              update({ variation: "safe", theme: "light", accent: "#000000" });
+              // Readable: monochrome accent (matches body text) on whichever
+              // theme is currently active.
+              update({ variation: "safe", accent: READABLE_ACCENT[state.theme] || READABLE_ACCENT.light });
             }
           }}
           theme={state.theme}
           onThemeChange={(t) => {
+            if (state.variation === "safe") {
+              // Stay in Readable, just flip its monochrome accent to match.
+              update({ theme: t, accent: READABLE_ACCENT[t] || READABLE_ACCENT.light });
+              return;
+            }
             const valid = ACCENTS_BY_THEME[t] || [];
-            // Coming from Readable (variation === "safe") always resets to the first
-            // accent for the new theme so Light returns to Cobalt and Dark to Lime.
-            const wasReadable = state.variation === "safe";
-            const nextAccent = wasReadable
-              ? valid[0]
-              : (valid.includes(state.accent) ? state.accent : valid[0]);
+            const nextAccent = valid.includes(state.accent) ? state.accent : valid[0];
             update({ theme: t, accent: nextAccent, variation: "bold", aboutStyle: "wild" });
           }}
         />

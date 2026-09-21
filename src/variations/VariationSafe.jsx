@@ -1,16 +1,86 @@
 // =============================================================
-// VariationSafe — editorial, classic, warm
-// Close to the original site: single column, generous margins,
-// serif display + clean sans body, warm cream background.
+// VariationSafe — "Readable": styled like raw markdown.
+// Body typeface, link color, and logo stay the same as the rest of
+// the site, but structure is expressed with literal markdown syntax
+// (#, ##, **, -, [text](url), ---) so the page can be copy/pasted
+// straight into an LLM and parsed as clean markdown.
 // =============================================================
 import React from "react";
 import { Reveal } from "../components/Reveal.jsx";
+
+const MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
 
 // External (http/https) links open in a new tab; mailto and in-page anchors don't.
 const extProps = (href) =>
   href && /^https?:\/\//.test(href)
     ? { target: "_blank", rel: "noopener noreferrer" }
     : {};
+
+// A markdown-syntax character (#, *, -, [, ], (, ), >, |) — real text,
+// dimmed and set in mono so it reads as punctuation, not content.
+function Syn({ children, style }) {
+  return (
+    <span
+      style={{
+        fontFamily: MONO,
+        color: "var(--fg-muted)",
+        opacity: 0.5,
+        ...style,
+      }}
+    >
+      {children}
+    </span>
+  );
+}
+
+function MdHeading({ level = 2, children, style, as }) {
+  const hashes = "#".repeat(level);
+  const Tag = as || `h${level}`;
+  return (
+    <Tag style={{ ...style, display: "block" }}>
+      <Syn style={{ marginRight: "0.35em", fontSize: "0.55em", verticalAlign: "middle" }}>
+        {hashes}
+      </Syn>
+      {children}
+    </Tag>
+  );
+}
+
+function MdBold({ children, style }) {
+  return (
+    <strong style={{ fontWeight: 600, ...style }}>
+      <Syn>**</Syn>
+      {children}
+      <Syn>**</Syn>
+    </strong>
+  );
+}
+
+function MdRule() {
+  return (
+    <div
+      style={{
+        fontFamily: MONO,
+        color: "var(--fg-muted)",
+        opacity: 0.5,
+        letterSpacing: "0.15em",
+        margin: "clamp(48px, 7vw, 80px) 0 clamp(24px, 3.5vw, 40px)",
+      }}
+      aria-hidden="true"
+    >
+      ---
+    </div>
+  );
+}
+
+function MdListItem({ children, style }) {
+  return (
+    <div style={{ display: "flex", gap: "0.6em", ...style }}>
+      <Syn style={{ opacity: 0.5 }}>-</Syn>
+      <span>{children}</span>
+    </div>
+  );
+}
 
 const safeStyles = {
   page: {
@@ -180,21 +250,37 @@ const safeStyles = {
   },
 };
 
-function SafeLink({ href, children, brand }) {
+// Renders as literal markdown link syntax — [label](url) — with the
+// label carrying the site's normal link styling and the brackets/url
+// dimmed into mono so the whole thing still reads as one clickable link.
+function SafeLink({ href, children, brand, arrow }) {
   return (
     <a
       href={href}
       data-brand={brand || undefined}
       {...extProps(href)}
       style={{
-        color: "var(--accent)",
-        textDecoration: "underline",
-        textDecorationColor: "var(--accent)",
-        textDecorationThickness: "1px",
-        textUnderlineOffset: "3px",
+        color: "inherit",
+        textDecoration: "none",
+        wordBreak: "break-word",
       }}
     >
-      {children}
+      <Syn>[</Syn>
+      <span
+        style={{
+          color: "var(--accent)",
+          textDecoration: "underline",
+          textDecorationColor: "var(--accent)",
+          textDecorationThickness: "1px",
+          textUnderlineOffset: "3px",
+        }}
+      >
+        {children}
+        {arrow ? " →" : ""}
+      </span>
+      <Syn>{"]("}</Syn>
+      <Syn style={{ fontSize: "0.7em" }}>{href}</Syn>
+      <Syn>)</Syn>
     </a>
   );
 }
@@ -230,9 +316,15 @@ export function VariationSafe({ content, theme = "light" }) {
         </address>
       </header>
 
-      {c.meta.tagline && <p style={safeStyles.tagline}>{c.meta.tagline}</p>}
+      {c.meta.tagline && (
+        <p style={safeStyles.tagline}>
+          <Syn style={{ marginRight: "0.5em" }}>{">"}</Syn>
+          {c.meta.tagline}
+        </p>
+      )}
 
       <Reveal as="h1" style={{ ...safeStyles.lead, whiteSpace: "pre-line" }}>
+        <Syn style={{ marginRight: "0.3em", fontSize: "0.5em", verticalAlign: "middle" }}>#</Syn>
         {c.intro.lead
           .replace(/Glynn-Finnegan, /, "Glynn-Finnegan,\n")
           .replace(/Director building /, "Director\nbuilding ")}
@@ -240,39 +332,49 @@ export function VariationSafe({ content, theme = "light" }) {
 
       <Reveal delay={120}>
         <p style={safeStyles.body}>{renderBody(c.intro.body)}</p>
-        <p style={safeStyles.aside}>{c.intro.aside}</p>
+        <p style={safeStyles.aside}>
+          <Syn style={{ marginRight: "0.5em" }}>{">"}</Syn>
+          {c.intro.aside}
+        </p>
         <div style={safeStyles.ctaWrap}>
-          <a href={c.intro.cta.href} data-brand="hello" style={safeStyles.cta}>
-            {c.intro.cta.label} →
-          </a>
+          <SafeLink href={c.intro.cta.href} brand="hello" arrow>
+            {c.intro.cta.label}
+          </SafeLink>
         </div>
       </Reveal>
 
-      <div style={safeStyles.rule}>—</div>
+      <MdRule />
 
       <section>
-        <Reveal as="h2" style={safeStyles.sectionTitle}>
-          Timeline
+        <Reveal>
+          <MdHeading level={2} style={safeStyles.sectionTitle}>
+            Timeline
+          </MdHeading>
         </Reveal>
         <div>
           {c.timeline.map((row, i) => (
             <Reveal key={i} delay={i * 90}>
               <div style={safeStyles.timelineRow}>
                 <div style={safeStyles.timelineYears}>
-                  {row.years.includes("—") ? (
-                    <React.Fragment>
-                      {row.years}
+                  <MdBold>
+                    {row.years}
+                    {row.years.includes("—") && (
                       <span style={{ color: "var(--accent)", marginLeft: "0.35em" }}>✱</span>
-                    </React.Fragment>
-                  ) : row.years}
+                    )}
+                  </MdBold>
                 </div>
                 <div>
-                  <div style={safeStyles.timelinePlace}>{row.place}</div>
+                  <MdHeading level={3} style={safeStyles.timelinePlace}>
+                    {row.place}
+                  </MdHeading>
                   {row.location && (
                     <div style={safeStyles.timelineLocation}>{row.location}</div>
                   )}
                   {row.detail && (
-                    <div style={safeStyles.timelineDetail}>{row.detail}</div>
+                    <div style={safeStyles.timelineDetail}>
+                      <Syn style={{ marginRight: "0.5em" }}>{">"}</Syn>
+                      {row.detail}
+                    </div>
                   )}
                 </div>
               </div>
@@ -281,50 +383,52 @@ export function VariationSafe({ content, theme = "light" }) {
         </div>
       </section>
 
-      <div style={safeStyles.rule}>—</div>
+      <MdRule />
 
       <section>
-        <Reveal as="h2" style={safeStyles.sectionTitle}>
-          Writing
+        <Reveal>
+          <MdHeading level={2} style={safeStyles.sectionTitle}>
+            Writing
+          </MdHeading>
         </Reveal>
         <Reveal>
           <p style={safeStyles.writingBlurb}>{c.writing.blurb}</p>
         </Reveal>
         <div style={safeStyles.ctaWrap}>
-          <a
-            href={c.writing.marqueeHref || "#"}
-            data-brand="hello"
-            {...extProps(c.writing.marqueeHref)}
-            style={safeStyles.cta}
-          >
-            Read my latest article →
-          </a>
+          <SafeLink href={c.writing.marqueeHref || "#"} brand="hello" arrow>
+            Read my latest article
+          </SafeLink>
         </div>
       </section>
 
-      <div style={safeStyles.rule}>—</div>
+      <MdRule />
 
       <section>
-        <Reveal as="h2" style={safeStyles.sectionTitle}>
-          Awards
+        <Reveal>
+          <MdHeading level={2} style={safeStyles.sectionTitle}>
+            Awards
+          </MdHeading>
         </Reveal>
-        <ul style={safeStyles.awardsList}>
+        <div style={safeStyles.awardsList}>
           {c.awards.map((a, i) => (
-            <Reveal key={i} as="li" delay={i * 50} style={safeStyles.awardItem}>
-              {a}
+            <Reveal key={i} delay={i * 50}>
+              <MdListItem style={safeStyles.awardItem}>{a}</MdListItem>
             </Reveal>
           ))}
-        </ul>
+        </div>
       </section>
 
-      <div style={safeStyles.rule}>—</div>
+      <MdRule />
 
       <Reveal>
-        <p style={safeStyles.aside}>{c.intro.aside}</p>
+        <p style={safeStyles.aside}>
+          <Syn style={{ marginRight: "0.5em" }}>{">"}</Syn>
+          {c.intro.aside}
+        </p>
         <div style={safeStyles.ctaWrap}>
-          <a href={c.intro.cta.href} data-brand="hello" style={safeStyles.cta}>
-            {c.intro.cta.label} →
-          </a>
+          <SafeLink href={c.intro.cta.href} brand="hello" arrow>
+            {c.intro.cta.label}
+          </SafeLink>
         </div>
       </Reveal>
 
@@ -332,14 +436,9 @@ export function VariationSafe({ content, theme = "light" }) {
         <div>© {new Date().getFullYear()} Adam Glynn-Finnegan</div>
         <div style={safeStyles.socials}>
           {c.contact.social.map((s, i) => (
-            <a
-              key={i}
-              href={s.href}
-              {...extProps(s.href)}
-              style={safeStyles.socialLink}
-            >
+            <SafeLink key={i} href={s.href} style={safeStyles.socialLink}>
               {s.label}
-            </a>
+            </SafeLink>
           ))}
         </div>
       </footer>

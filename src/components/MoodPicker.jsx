@@ -45,8 +45,8 @@ export function MoodPicker({ accent, accentsForTheme, onAccentChange, mode, onMo
       {/* Light/Dark + accent swatches + Readable */}
       <div style={rowStyle}>
         <div style={segWrap}>
-          <button type="button" style={segBtn(mode === "view" && theme === "light")} onClick={() => onThemeChange("light")}>Light</button>
-          <button type="button" style={segBtn(mode === "view" && theme === "dark")} onClick={() => onThemeChange("dark")}>Dark</button>
+          <button type="button" style={segBtn(theme === "light")} onClick={() => onThemeChange("light")}>Light</button>
+          <button type="button" style={segBtn(theme === "dark")} onClick={() => onThemeChange("dark")}>Dark</button>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginLeft: 8, opacity: mode === "view" ? 1 : 0, pointerEvents: mode === "view" ? "auto" : "none", transition: "opacity 200ms ease" }}>
           {accentsForTheme.map((value) => {
