@@ -4,6 +4,7 @@ import { CursorFollower } from "./components/CursorFollower.jsx";
 import { MoodPicker } from "./components/MoodPicker.jsx";
 import { VariationSafe } from "./variations/VariationSafe.jsx";
 import { VariationBold } from "./variations/VariationBold.jsx";
+import { VariationMobile } from "./variations/VariationMobile.jsx";
 import { useTweaks } from "./hooks/useTweaks.js";
 import { ACCENTS_BY_THEME } from "./constants.js";
 import { SITE_CONTENT } from "./content.js";
@@ -33,14 +34,19 @@ export default function App() {
   const [state, update] = useTweaks();
   const isMobile = useIsMobile();
 
-  // On mobile there's only the Readable version — the View (bold) layout and
-  // its Light/Dark + accent controls are hidden entirely. Readable is always
-  // light with a black accent, so force those regardless of saved prefs.
+  // On mobile there's only the plain single-column layout (VariationMobile) —
+  // the View (bold) layout, the markdown-styled Readable, and the Light/Dark +
+  // accent controls are all hidden. Mobile is always light with a black
+  // accent, so force those regardless of saved prefs.
   const variation = isMobile ? "safe" : state.variation;
   const theme = isMobile ? "light" : state.theme;
   const accent = isMobile ? "#000000" : state.accent;
 
-  const Variation = variation === "bold" ? VariationBold : VariationSafe;
+  const Variation = isMobile
+    ? VariationMobile
+    : variation === "bold"
+    ? VariationBold
+    : VariationSafe;
 
   return (
     <React.Fragment>
